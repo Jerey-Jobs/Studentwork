@@ -1,0 +1,26 @@
+#!/bin/bash
+
+    echo $CLASSNAME
+        CLASSNAME=tx502
+
+    echo $CLASSNAME
+
+    echo date
+    echo $date
+    echo 'date'
+    echo `date`
+
+    echo "\$HOME"
+    echo '\$HOME'
+    echo \$HOME
+
+
+if [ -z $1 ];then
+        echo "the file is there"
+        exit 1 
+fi
+if [ -f $1 ];then
+        echo " is file"
+else
+        echo "$1 no such file"
+fi
