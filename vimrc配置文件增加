@@ -1,0 +1,68 @@
+".c .h .hpp .cpp 等文件时自动调用SetTitle 函数"
+ autocmd BufNewFile *.[ch],*.hpp,*.cpp exec ":call SetTitle()"
+ " 加入注释 
+func SetComment()
+    call setline(1,"/*****************************************************")    
+    call append(line("."),   "copyright (C), 2014-2015, Lighting Studio. Co.,     Ltd. ")
+    call append(line(".")+1, "File name：")
+    call append(line(".")+2, "Author：Jerey_Jobs    Version:0.1    Date: ")
+    call append(line(".")+3, "Description：")
+    call append(line(".")+4, "Funcion List: ")
+    call append(line(".")+5, "*****************************************************/")
+endfunc
+
+" 定义函数SetTitle，自动插入文件头 
+func SetTitle()
+    call SetComment()
+    call append(line(".")+6, "")
+    call append(line(".")+7, "#include <stdio.h>")
+    call append(line(".")+8, "")
+    call append(line(".")+9, "int main()")
+    call append(line(".")+10, "{")
+    call append(line(".")+11, "")
+    call append(line(".")+12, "    return 0;")
+    call append(line(".")+13, "}")
+endfunc
+
+
+
+"自动补全
+:inoremap ( ()<ESC>i
+:inoremap ) <c-r>=ClosePair(')')<CR>
+:inoremap { {<CR>}<ESC>O
+:inoremap } <c-r>=ClosePair('}')<CR>
+:inoremap [ []<ESC>i
+:inoremap ] <c-r>=ClosePair(']')<CR>
+:inoremap " ""<ESC>i
+:inoremap ' ''<ESC>i
+
+function! ClosePair(char)
+    if getline('.')[col('.') - 1] == a:char
+        return "\<Right>"
+    else
+        return a:char
+    endif
+endfunction
+filetype plugin indent on 
+"打开文件类型检测, 加了这句才可以用智能补全
+set completeopt=longest,menu
+
+
+ "C，C++ 按F5编译运行
+map <F5> :call CompileRunGcc()<CR>
+func! CompileRunGcc()
+exec "w"
+        if &filetype == 'c'"
+            exec "!g++ % -o %<"
+            exec "! ./%<"
+        elseif &filetype == 'cpp'
+            exec "!g++ % -o %<"
+            exec "! ./%<"
+        elseif &filetype == 'java'
+            exec "!javac %" 
+            exec "!java %<"
+        elseif
+            &filetype== 'sh'
+            :!./%
+        endif                                     
+endfunc
