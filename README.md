@@ -8,8 +8,8 @@
                     文件在仓库主目录address_list下 里面3个版本
                     
                   2.停车场软件 c语言写 db为数据库版本
-                  文件在仓库主目录下  park_manage 文件夹里
-                  
+                     文件在仓库主目录下  park_manage 文件夹里
+                     
                   3.c_s 服务器—客户端的聊天软件  客户端2个版本 一个无界面  一个用curses.h图形库写的 有界面功能
                     但有几个bug还未修复 还未用makefile工程构建好  程序全在 /main/src 下
                     
