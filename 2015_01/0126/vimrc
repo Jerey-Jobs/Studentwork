@@ -1,0 +1,134 @@
+if v:lang =~ "utf8$" || v:lang =~ "UTF-8$"
+   set fileencodings=utf-8,latin1
+endif
+
+set nocompatible	" Use Vim defaults (much better!)
+set bs=indent,eol,start		" allow backspacing over everything in insert mode
+"set ai			" always set autoindenting on
+"set backup		" keep a backup file
+set viminfo='20,\"50	" read/write a .viminfo file, don't store more
+			" than 50 lines of registers
+set history=50		" keep 50 lines of command line history
+set ruler		" show the cursor position all the time
+set mouse=a
+set cursorline
+set foldmethod=manual
+set completeopt=preview,menu
+set autoindent
+vmap<C-c> "+y
+set number
+let Tlist_Use_Ringht_window = 1
+" Only do this part when compiled with support for autocommands
+if has("autocmd")
+  " In text files, always limit the width of text to 78 characters
+  autocmd BufRead *.txt set tw=78
+  " When editing a file, always jump to the last cursor position
+  autocmd BufReadPost *
+  \ if line("'\"") > 0 && line ("'\"") <= line("$") |
+  \   exe "normal! g'\"" |
+  \ endif
+endif
+
+if has("cscope") && filereadable("/usr/bin/cscope")
+   set csprg=/usr/bin/cscope
+   set csto=0
+   set cst
+   set nocsverb
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+set expandtab
+" add any database in current directory
+   if filereadable("cscope.out")
+      cs add cscope.out
+   " else add database pointed to by environment
+   elseif $CSCOPE_DB != ""
+      cs add $CSCOPE_DB
+   endif
+   set csverb
+endif
+
+" Switch syntax highlighting on, when the terminal has colors
+" Also switch on highlighting the last used search pattern.
+if &t_Co > 2 || has("gui_running")
+  syntax on
+  set hlsearch
+endif
+
+if &term=="xterm"
+     set t_Co=8
+     set t_Sb=[4%dm
+     set t_Sf=[3%dm
+endif
+
+".c .h .hpp .cpp 等文件时自动调用SetTitle 函数"
+ autocmd BufNewFile *.[ch],*.hpp,*.cpp exec ":call SetTitle()"
+ " 加入注释 
+func SetComment()
+    call setline(1,"/*****************************************************")    
+    call append(line("."),   "copyright (C), 2014-2015, Lighting Studio. Co.,     Ltd. ")
+    call append(line(".")+1, "File name：")
+    call append(line(".")+2, "Author：Jerey_Jobs    Version:0.1    Date: ")
+    call append(line(".")+3, "Description：")
+    call append(line(".")+4, "Funcion List: ")
+    call append(line(".")+5, "*****************************************************/")
+endfunc
+
+" 定义函数SetTitle，自动插入文件头 
+func SetTitle()
+    call SetComment()
+    call append(line(".")+6, "")
+    call append(line(".")+7, "#include <stdio.h>")
+    call append(line(".")+8, "")
+    call append(line(".")+9, "int main()")
+    call append(line(".")+10, "{")
+    call append(line(".")+11, "")
+    call append(line(".")+12, "    return 0;")
+    call append(line(".")+13, "}")
+endfunc
+
+
+"自动补全
+:inoremap ( ()<ESC>i
+:inoremap ) <c-r>=ClosePair(')')<CR>
+:inoremap { {<CR>}<ESC>O
+:inoremap } <c-r>=ClosePair('}')<CR>
+:inoremap [ []<ESC>i
+:inoremap ] <c-r>=ClosePair(']')<CR>
+:inoremap " ""<ESC>i
+:inoremap ' ''<ESC>i
+
+function! ClosePair(char)
+    if getline('.')[col('.') - 1] == a:char
+        return "\<Right>"
+    else
+        return a:char
+    endif
+endfunction
+filetype plugin indent on 
+"打开文件类型检测, 加了这句才可以用智能补全
+set completeopt=longest,menu
+
+
+"C，C++ 按F5编译运行
+map <F5> :call CompileRunGcc()<CR>
+func! CompileRunGcc()
+
+   exec "w"
+        if &filetype == 'c'"
+            exec "!g++ % -o %<"
+            exec "! ./%<"
+        elseif &filetype == 'cpp'
+           exec "!g++ % -o %<"
+            exec "! ./%<"
+        elseif &filetype == 'java'
+            exec "!javac %" 
+            exec "!java %<"
+        elseif
+            &filetype== 'sh'
+          :!./%
+        endif                                       
+endfunc
+
+
+

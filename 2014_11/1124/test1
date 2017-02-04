@@ -1,0 +1,10 @@
+#!/bin/bash
+
+echo *
+echo \*
+echo "*"
+echo '*'
+echo "$HOME"
+echo '$HOME'
+echo \$HOME
+

@@ -1,0 +1,32 @@
+// c_student.cpp: implementation of the c_student class.
+//
+//////////////////////////////////////////////////////////////////////
+
+#include "stdafx.h"
+#include "c_student.h"
+#include <iostream>
+
+//////////////////////////////////////////////////////////////////////
+// Construction/Destruction
+//////////////////////////////////////////////////////////////////////
+
+c_student::c_student()
+{
+
+}
+
+c_student::c_student(int age)
+{
+    this->age = age;
+}
+
+
+c_student::~c_student()
+{
+
+}
+
+int c_student::getage()
+{
+    return this->age;
+}
